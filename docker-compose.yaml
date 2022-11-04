@@ -1,27 +1,28 @@
-version: '3'
+version: '3.7'
 
 services:
   db:
-    image: postgres
+    image: postgres:14.1-alpine
     restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/data/postgres
     networks:
       - backend
+    ports:
+      - "5432:5432"
     volumes:
-      - ./db_data:/var/lib/postgresql/data
-      - ./app/config/init.sql:/docker-entrypoint-initdb.b/10-inti.sql
+      - db_data:/data/postgres
+      - ./app/config/init.sql:/docker-entrypoint-initdb.d/10-init.sql
     env_file:
       - ./app/config/.env
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "devdb", "-U", "dev" ]
-      timeout: 45s
-      interval: 10s
-      reties: 10
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
   app:
     build: app
@@ -30,11 +31,11 @@ services:
     networks:
       - backend
     depends_on:
-      postgres:
-        condition: service_healthy
+      - db
 
 volumes:
   db_data:
+
 
 networks:
   backend:

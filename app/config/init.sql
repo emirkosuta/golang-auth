@@ -7,5 +7,4 @@ create table users (
 
 insert into users(first_name, last_name)
 values
-	("Developer", "Developer"),
-	("Admin", "Admin");
+	('Developer', 'Developer');

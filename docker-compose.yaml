@@ -7,13 +7,12 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - PGDATA=/data/postgres
-    networks:
-      - backend
     ports:
       - "5432:5432"
+    networks:
+      - backend
     volumes:
-      - db_data:/data/postgres
+      - db_data:/var/lib/postgresql/data
       - ./app/config/init.sql:/docker-entrypoint-initdb.d/10-init.sql
     env_file:
       - ./app/config/.env
@@ -35,6 +34,7 @@ services:
 
 volumes:
   db_data:
+    driver: local
 
 
 networks:

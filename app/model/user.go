@@ -9,7 +9,7 @@ type User struct {
 func GetAllUsers() ([]User, error) {
 	var users []User
 
-	query := `select id, first_name, last_name from users`
+	query := `select id, first_name, last_name from users;`
 
 	rows, err := db.Query(query)
 	if err != nil {
